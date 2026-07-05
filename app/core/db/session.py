@@ -1,6 +1,5 @@
 from sqlalchemy import text
-from sqlalchemy.ext.asyncio import create_async_engine
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
 from sqlmodel import SQLModel
 from sqlmodel.ext.asyncio.session import AsyncSession
 
@@ -11,7 +10,8 @@ engine = create_async_engine(
     connect_args={"check_same_thread": False},
 )
 
-async_session_maker = sessionmaker(
+# Use async_sessionmaker for async engine to resolve Pyright overload mismatch
+async_session_maker = async_sessionmaker(
     engine, class_=AsyncSession, expire_on_commit=False
 )
 
@@ -21,10 +21,8 @@ async def get_session():
 
 async def init_db():
     async with engine.begin() as conn:
-        # Import models to ensure they are registered on SQLModel.metadata
         from app.core.db.models import User, Session, Conversation, Message, Model, InstalledModel, AuditLog
         await conn.run_sync(SQLModel.metadata.create_all)
         
-        # Enable WAL mode and check foreign keys enforcement using text()
         await conn.execute(text("PRAGMA journal_mode=WAL;"))
         await conn.execute(text("PRAGMA foreign_keys=ON;"))

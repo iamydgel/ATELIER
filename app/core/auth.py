@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 import secrets
 from typing import Optional
 from fastapi import Depends, HTTPException, status
@@ -57,8 +57,8 @@ async def current_user(
             detail="Signature de session invalide."
         )
     
-    result = await db.execute(select(Session).where(Session.id == session_id))
-    db_session = result.scalar_one_or_none()
+    result = await db.exec(select(Session).where(Session.id == session_id))
+    db_session = result.first()
     
     if not db_session:
         raise HTTPException(
@@ -66,7 +66,7 @@ async def current_user(
             detail="Session inexistante ou expirée."
         )
     
-    if db_session.expires_at < datetime.utcnow():
+    if db_session.expires_at < datetime.now(timezone.utc).replace(tzinfo=None):
         await db.delete(db_session)
         await db.commit()
         raise HTTPException(
@@ -74,8 +74,8 @@ async def current_user(
             detail="Session expirée. Veuillez vous reconnecter."
         )
     
-    user_result = await db.execute(select(User).where(User.id == db_session.user_id))
-    user = user_result.scalar_one_or_none()
+    user_result = await db.exec(select(User).where(User.id == db_session.user_id))
+    user = user_result.first()
     
     if not user or not user.is_active:
         raise HTTPException(

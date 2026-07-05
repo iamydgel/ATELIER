@@ -1,5 +1,5 @@
 import secrets
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from fastapi import APIRouter, Depends, HTTPException, Response, status
 from pydantic import BaseModel
 from sqlmodel import select
@@ -40,8 +40,8 @@ async def signup(payload: UserRegister, db: AsyncSession = Depends(get_session))
             detail="Le mot de passe doit contenir au moins 6 caractères."
         )
     
-    result = await db.execute(select(User).where(User.email == email_lower))
-    existing_user = result.scalar_one_or_none()
+    result = await db.exec(select(User).where(User.email == email_lower))
+    existing_user = result.first()
     if existing_user:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -58,8 +58,8 @@ async def signup(payload: UserRegister, db: AsyncSession = Depends(get_session))
 @router.post("/login")
 async def login(payload: UserLogin, response: Response, db: AsyncSession = Depends(get_session)):
     email_lower = payload.email.strip().lower()
-    result = await db.execute(select(User).where(User.email == email_lower))
-    user = result.scalar_one_or_none()
+    result = await db.exec(select(User).where(User.email == email_lower))
+    user = result.first()
     
     if not user or not verify_password(user.password_hash, payload.password):
         raise HTTPException(
@@ -75,7 +75,7 @@ async def login(payload: UserLogin, response: Response, db: AsyncSession = Depen
     
     # Create new session
     session_id = secrets.token_urlsafe(32)
-    expires_at = datetime.utcnow() + timedelta(hours=settings.LOCALAI_SESSION_TTL_HOURS)
+    expires_at = datetime.now(timezone.utc).replace(tzinfo=None) + timedelta(hours=settings.LOCALAI_SESSION_TTL_HOURS)
     
     session = DbSession(
         id=session_id,

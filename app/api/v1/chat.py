@@ -5,7 +5,8 @@ from typing import List, Dict, Optional, Literal
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
-from sqlmodel import select
+from datetime import datetime, timezone
+from sqlmodel import select, desc, asc
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 from app.core.auth import current_user
@@ -54,14 +55,20 @@ async def chat_completions(
     user: User = Depends(current_user),
     db: AsyncSession = Depends(get_session)
 ):
+    if user.id is None:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Identifiant utilisateur non trouvé."
+        )
+
     if payload.conversation_id:
-        result = await db.execute(
+        result = await db.exec(
             select(Conversation).where(
                 Conversation.id == payload.conversation_id,
                 Conversation.user_id == user.id
             )
         )
-        conversation = result.scalar_one_or_none()
+        conversation = result.first()
         if not conversation:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
@@ -123,7 +130,7 @@ async def chat_completions(
     db.add(assistant_db_message)
     
     # Update conversation timestamp
-    conversation.updated_at = datetime.utcnow()
+    conversation.updated_at = datetime.now(timezone.utc).replace(tzinfo=None)
     db.add(conversation)
     
     await db.commit()
@@ -140,14 +147,20 @@ async def chat_stream(
     user: User = Depends(current_user),
     db: AsyncSession = Depends(get_session)
 ):
+    if user.id is None:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Identifiant utilisateur non trouvé."
+        )
+
     if payload.conversation_id:
-        result = await db.execute(
+        result = await db.exec(
             select(Conversation).where(
                 Conversation.id == payload.conversation_id,
                 Conversation.user_id == user.id
             )
         )
-        conversation = result.scalar_one_or_none()
+        conversation = result.first()
         if not conversation:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
@@ -218,7 +231,7 @@ async def chat_stream(
                 latency_ms=latency_ms
             )
             db.add(assistant_db_message)
-            conversation.updated_at = datetime.utcnow()
+            conversation.updated_at = datetime.now(timezone.utc).replace(tzinfo=None)
             db.add(conversation)
             await db.commit()
             
@@ -234,12 +247,18 @@ async def get_conversations(
     user: User = Depends(current_user),
     db: AsyncSession = Depends(get_session)
 ):
-    result = await db.execute(
+    if user.id is None:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Identifiant utilisateur non trouvé."
+        )
+
+    result = await db.exec(
         select(Conversation)
         .where(Conversation.user_id == user.id, Conversation.archived_at == None)
-        .order_by(Conversation.updated_at.desc())
+        .order_by(desc(Conversation.updated_at))
     )
-    conversations = result.scalars().all()
+    conversations = result.all()
     
     return [
         ConversationResponse(
@@ -258,26 +277,32 @@ async def get_messages(
     user: User = Depends(current_user),
     db: AsyncSession = Depends(get_session)
 ):
+    if user.id is None:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Identifiant utilisateur non trouvé."
+        )
+
     # Verify conversation ownership
-    convo_result = await db.execute(
+    convo_result = await db.exec(
         select(Conversation).where(
             Conversation.id == conversation_id,
             Conversation.user_id == user.id
         )
     )
-    conversation = convo_result.scalar_one_or_none()
+    conversation = convo_result.first()
     if not conversation:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Conversation introuvable."
         )
         
-    result = await db.execute(
+    result = await db.exec(
         select(Message)
         .where(Message.conversation_id == conversation_id)
-        .order_by(Message.created_at.asc())
+        .order_by(asc(Message.created_at))
     )
-    messages = result.scalars().all()
+    messages = result.all()
     
     return [
         MessageResponse(
