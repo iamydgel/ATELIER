@@ -16,7 +16,12 @@ localai.db-shm
 
 # Node
 node_modules/
+web/node_modules/
 dist/
+web/dist/
+
+# Secrets — jamais committer .env (seulement .env.example)
+.env
 
 # IDE & Logs
 .idea/
