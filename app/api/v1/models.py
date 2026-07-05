@@ -13,7 +13,7 @@ from app.core.db.models import InstalledModel, Model, User
 from app.core.db.session import get_session
 from app.inference.driver import get_inference_driver
 
-router = APIRouter(prefix="/models", tags=["models"])
+router = APIRouter(prefix="/api/v1/models", tags=["models"])
 
 # In-memory store for installations progress
 INSTALL_PROGRESS: dict[str, dict[str, Any]] = {}
@@ -103,7 +103,8 @@ async def get_models_catalog(
         # Check if there is an ongoing install
         # If there is one active in memory, mark it
         for info in INSTALL_PROGRESS.values():
-            if info["model_id"] == m.id and info["status"] in ["started", "downloading", "verifying"]:
+            active_statuses = ["started", "downloading", "verifying"]
+            if info["model_id"] == m.id and info["status"] in active_statuses:
                 installed_status = "installing"
                 break
 
