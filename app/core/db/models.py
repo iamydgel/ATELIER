@@ -48,6 +48,7 @@ class Message(SQLModel, table=True):
     tokens_in: int = 0
     tokens_out: int = 0
     latency_ms: int = 0
+    truncated: bool = Field(default=False)
     created_at: datetime = Field(default_factory=utc_now, index=True)
 
 class Model(SQLModel, table=True):

@@ -37,6 +37,9 @@ target-version = "py312"
 
 [tool.ruff.lint]
 select = ["E","F","I","B","UP","S","ASYNC","RUF","TCH"]
+# B008: standard FastAPI Depends() pattern — not a bug
+# B904: raise within except — HTTP exceptions don't need chaining
+ignore = ["B008", "B904"]
 
 [tool.pyright]
 include = ["app"]

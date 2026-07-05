@@ -1,13 +1,13 @@
+import asyncio
 import json
 import time
 import uuid
-import asyncio
 from datetime import UTC, datetime
 from typing import Literal
-from loguru import logger
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, Request, status
 from fastapi.responses import StreamingResponse
+from loguru import logger
 from pydantic import BaseModel
 from sqlmodel import asc, desc, func, select
 from sqlmodel.ext.asyncio.session import AsyncSession
@@ -152,6 +152,7 @@ async def chat_completions(
 
 @router.post("/stream")
 async def chat_stream(
+    request: Request,
     payload: ChatRequest,
     user: User = Depends(current_user),
     db: AsyncSession = Depends(get_session)
@@ -246,7 +247,22 @@ async def chat_stream(
             
             yield "data: [DONE]\n\n"
         except asyncio.CancelledError:
-            logger.info("Streaming client disconnected. Stopping upstream generator.")
+            logger.info("Streaming client disconnected - sauvegarde du message partiel.")
+            if assistant_content.strip():
+                latency_ms = int((time.time() - start_time) * 1000)
+                partial_msg = Message(
+                    conversation_id=conversation.id,
+                    role="assistant",
+                    content=assistant_content,
+                    tokens_in=tokens_in,
+                    tokens_out=tokens_out,
+                    latency_ms=latency_ms,
+                    truncated=True,
+                )
+                db.add(partial_msg)
+                conversation.updated_at = datetime.now(UTC).replace(tzinfo=None)
+                db.add(conversation)
+                await db.commit()
             raise
         except Exception as e:
             yield f"data: {json.dumps({'error': f'Erreur de streaming: {e!s}'})}\n\n"
@@ -328,8 +344,8 @@ async def get_messages(
 
 @router.get("/observability")
 async def get_observability_stats(
-    user: User = Depends(current_user),  # noqa: B008
-    db: AsyncSession = Depends(get_session)  # noqa: B008
+    user: User = Depends(current_user),
+    db: AsyncSession = Depends(get_session)
 ):
     if user.id is None:
         raise HTTPException(
