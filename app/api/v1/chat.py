@@ -374,9 +374,9 @@ async def get_observability_stats(
     # 3. Personal Stats
     # Conversations count
     convo_count_result = await db.exec(
-        select(func.count(Conversation.id)).where(
+        select(func.count(Conversation.id)).where(  # type: ignore[arg-type]
             Conversation.user_id == user.id,
-            Conversation.archived_at.is_(None)
+            Conversation.archived_at.is_(None)  # type: ignore[union-attr]
         )
     )
     conversations_count = convo_count_result.first() or 0
@@ -401,7 +401,7 @@ async def get_observability_stats(
     # 4. Recent conversations (last 20)
     recent_convo_result = await db.exec(
         select(Conversation)
-        .where(Conversation.user_id == user.id, Conversation.archived_at.is_(None))
+        .where(Conversation.user_id == user.id, Conversation.archived_at.is_(None))  # type: ignore[union-attr]
         .order_by(desc(Conversation.updated_at))
         .limit(20)
     )
@@ -411,7 +411,7 @@ async def get_observability_stats(
     for c in recent_convos:
         # Get count of messages in this convo
         msg_count_result = await db.exec(
-            select(func.count(Message.id)).where(Message.conversation_id == c.id)
+            select(func.count(Message.id)).where(Message.conversation_id == c.id)  # type: ignore[arg-type]
         )
         msg_count = msg_count_result.first() or 0
         recent_conversations_list.append({
