@@ -37,6 +37,7 @@ export function TopBar({
       {/* Toggle Sidebar Button */}
       <button
         onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+        aria-label={isSidebarOpen ? 'Réduire la barre latérale' : 'Ouvrir la barre latérale'}
         className="absolute left-4 top-3.5 z-10 p-1 bg-bg-1 border border-line-1 rounded-md text-text-3 hover:text-text-1 transition-all active:scale-95"
       >
         {isSidebarOpen ? <ChevronLeft className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}

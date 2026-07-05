@@ -3,11 +3,13 @@ import { useQuery } from '@tanstack/react-query'
 import { ShieldAlert, Cpu, Database, RefreshCw, BarChart2 } from 'lucide-react'
 import { QUERY_KEYS } from '../lib/queryKeys'
 import { apiRequest } from '../lib/api'
+import { useWindowSize } from '../lib/hooks'
 import { Sidebar } from '../components/layout/Sidebar'
 import { Spinner } from '../components/ui/Spinner'
 
 export default function Observability() {
   const [isSidebarOpen] = useState(true)
+  const { isMobile } = useWindowSize()
 
   // Fetch observability stats
   const { data: stats, isLoading, isError, refetch } = useQuery<any>({
@@ -18,7 +20,7 @@ export default function Observability() {
 
   return (
     <div className="flex h-screen bg-bg-0 text-text-1 font-sans overflow-hidden">
-      {isSidebarOpen && <Sidebar />}
+      {isSidebarOpen && !isMobile && <Sidebar />}
 
       <main className="flex-1 flex flex-col h-full overflow-hidden relative p-8">
         <header className="flex items-center justify-between pb-6 border-b border-line-1 mb-8">

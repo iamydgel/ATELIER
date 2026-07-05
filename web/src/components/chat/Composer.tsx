@@ -51,6 +51,7 @@ export function Composer({
           <button
             type="button"
             onClick={() => setShowSettings(!showSettings)}
+            aria-label="Paramètres d'inférence"
             className={`p-2 rounded-md border border-line-1 transition-colors ${
               showSettings
                 ? 'bg-bg-3 text-accent-warm border-line-2'
@@ -66,6 +67,7 @@ export function Composer({
             <button
               type="button"
               onClick={onStop}
+              aria-label="Arrêter la génération"
               className="p-2 bg-accent-danger/20 hover:bg-accent-danger/30 border border-accent-danger/40 rounded-md text-accent-danger transition-colors active:scale-95"
               title="Arrêter la génération"
             >
@@ -75,6 +77,7 @@ export function Composer({
             <button
               type="submit"
               disabled={!input.trim()}
+              aria-label="Envoyer le message"
               className="p-2 bg-bg-2 border border-line-1 rounded-md text-text-3 hover:text-accent-warm disabled:opacity-40 disabled:hover:text-text-3 transition-colors active:scale-95"
             >
               <Send className="w-5 h-5" />

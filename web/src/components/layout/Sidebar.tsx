@@ -153,6 +153,7 @@ export function Sidebar({ onNewChat }: SidebarProps) {
         )}
         <button
           onClick={() => logoutMutation.mutate()}
+          aria-label="Déconnexion"
           className="p-2 text-text-3 hover:text-accent-danger transition-colors rounded-md hover:bg-bg-2"
           title="Déconnexion"
         >

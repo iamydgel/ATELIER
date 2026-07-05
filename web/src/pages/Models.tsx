@@ -4,6 +4,7 @@ import { Cpu, RotateCw, AlertTriangle } from 'lucide-react'
 import { toast } from 'sonner'
 import { QUERY_KEYS } from '../lib/queryKeys'
 import { apiRequest, getActionableErrorMessage } from '../lib/api'
+import { useWindowSize } from '../lib/hooks'
 import { Sidebar } from '../components/layout/Sidebar'
 import { ModelCard } from '../components/models/ModelCard'
 import { EmptyState } from '../components/ui/EmptyState'
@@ -19,6 +20,7 @@ interface InstallProgressTracker {
 
 export default function Models() {
   const queryClient = useQueryClient()
+  const { isMobile } = useWindowSize()
   const [isSidebarOpen] = useState(true)
   
   // Track active installations in state
@@ -138,7 +140,7 @@ export default function Models() {
 
   return (
     <div className="flex h-screen bg-bg-0 text-text-1 font-sans overflow-hidden">
-      {isSidebarOpen && <Sidebar />}
+      {isSidebarOpen && !isMobile && <Sidebar />}
 
       <main className="flex-1 flex flex-col h-full overflow-hidden relative p-8">
         <header className="flex items-center justify-between pb-6 border-b border-line-1 mb-8">

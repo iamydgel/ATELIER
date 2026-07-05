@@ -5,6 +5,7 @@ import { Settings as SettingsIcon, LogOut, Copy, Check, Shield, Loader2 } from '
 import { toast } from 'sonner'
 import { QUERY_KEYS } from '../lib/queryKeys'
 import { apiRequest } from '../lib/api'
+import { useWindowSize } from '../lib/hooks'
 import { Sidebar } from '../components/layout/Sidebar'
 import type { User } from '../lib/types'
 
@@ -13,6 +14,7 @@ export default function Settings() {
   const queryClient = useQueryClient()
   const [copied, setCopied] = useState(false)
   const [isSidebarOpen] = useState(true)
+  const { isMobile } = useWindowSize()
 
   // Fetch current user
   const { data: user } = useQuery<User>({
@@ -56,7 +58,7 @@ export default function Settings() {
 
   return (
     <div className="flex h-screen bg-bg-0 text-text-1 font-sans overflow-hidden">
-      {isSidebarOpen && <Sidebar />}
+      {isSidebarOpen && !isMobile && <Sidebar />}
 
       <main className="flex-1 flex flex-col h-full overflow-hidden relative p-8">
         <header className="pb-6 border-b border-line-1 mb-8">

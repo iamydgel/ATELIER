@@ -103,6 +103,7 @@ export function ModelCard({
             </span>
             <button
               onClick={() => onUninstall(model.id)}
+              aria-label={`Désinstaller ${model.id}`}
               className="p-1.5 text-text-3 hover:text-accent-danger transition-colors rounded hover:bg-bg-2 cursor-pointer"
               title="Désinstaller le modèle"
             >
@@ -117,6 +118,7 @@ export function ModelCard({
             </span>
             <button
               onClick={() => onUninstall(model.id)}
+              aria-label={`Désinstaller ${model.id}`}
               className="p-1.5 text-text-3 hover:text-accent-danger transition-colors rounded hover:bg-bg-2 cursor-pointer"
               title="Désinstaller"
             >
