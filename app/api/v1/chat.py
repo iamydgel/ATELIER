@@ -1,8 +1,10 @@
 import json
 import time
 import uuid
+import asyncio
 from datetime import UTC, datetime
 from typing import Literal
+from loguru import logger
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.responses import StreamingResponse
@@ -243,6 +245,9 @@ async def chat_stream(
             await db.commit()
             
             yield "data: [DONE]\n\n"
+        except asyncio.CancelledError:
+            logger.info("Streaming client disconnected. Stopping upstream generator.")
+            raise
         except Exception as e:
             yield f"data: {json.dumps({'error': f'Erreur de streaming: {e!s}'})}\n\n"
             yield "data: [DONE]\n\n"
