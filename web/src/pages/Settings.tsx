@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from 'react-router-dom'
-import { Settings as SettingsIcon, LogOut, Copy, Check, Shield } from 'lucide-react'
+import { Settings as SettingsIcon, LogOut, Copy, Check, Shield, Loader2 } from 'lucide-react'
 import { toast } from 'sonner'
 import { QUERY_KEYS } from '../lib/queryKeys'
 import { apiRequest } from '../lib/api'
@@ -33,9 +33,19 @@ export default function Settings() {
     },
   })
 
-  // Hardcoded read-only configs for local env (V1)
-  const backendType = 'lmstudio'
-  const backendUrl = 'http://127.0.0.1:1234'
+  // Fetch live settings from backend
+  const { data: appSettings, isLoading: isLoadingSettings } = useQuery<{
+    backend_active: string
+    backend_url: string
+    session_ttl_hours: number
+    data_dir: string
+  }>({
+    queryKey: QUERY_KEYS.settings,
+    queryFn: () => apiRequest('/settings'),
+  })
+
+  const backendType = appSettings?.backend_active ?? ''
+  const backendUrl = appSettings?.backend_url ?? ''
 
   const handleCopyUrl = () => {
     navigator.clipboard.writeText(backendUrl)
@@ -68,6 +78,12 @@ export default function Settings() {
             </h3>
             
             <div className="space-y-4">
+              {isLoadingSettings ? (
+                <div className="flex items-center gap-2 text-text-3 text-xs font-mono py-4">
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  Chargement de la configuration...
+                </div>
+              ) : (
               <div>
                 <label className="block text-xs font-mono text-text-3 uppercase tracking-wider mb-2">
                   Backend Actif
@@ -111,8 +127,9 @@ export default function Settings() {
                   </button>
                 </div>
               </div>
-            </div>
+            )}
           </div>
+        </div>
 
           {/* Section: Profil */}
           {user && (

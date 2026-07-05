@@ -63,8 +63,8 @@ async def simulate_install_task(install_id: str, model_id: str, db_session_maker
 
 @router.get("/catalog")
 async def get_models_catalog(
-    user: User = Depends(current_user),  # noqa: B008
-    db: AsyncSession = Depends(get_session)  # noqa: B008
+    user: User = Depends(current_user),
+    db: AsyncSession = Depends(get_session)
 ):
     if user.id is None:
         raise HTTPException(
@@ -176,8 +176,8 @@ async def get_models_catalog(
 async def install_model(
     req: InstallRequest,
     background_tasks: BackgroundTasks,
-    user: User = Depends(current_user),  # noqa: B008
-    db: AsyncSession = Depends(get_session)  # noqa: B008
+    user: User = Depends(current_user),
+    db: AsyncSession = Depends(get_session)
 ):
     if user.id is None:
         raise HTTPException(
@@ -227,7 +227,7 @@ async def install_model(
 @router.get("/install/{install_id}/status", response_model=InstallStatusResponse)
 async def get_install_status(
     install_id: str,
-    user: User = Depends(current_user)  # noqa: B008
+    user: User = Depends(current_user)
 ):
     if user.id is None:
         raise HTTPException(
@@ -251,8 +251,8 @@ async def get_install_status(
 @router.delete("/{model_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def uninstall_model(
     model_id: str,
-    user: User = Depends(current_user),  # noqa: B008
-    db: AsyncSession = Depends(get_session)  # noqa: B008
+    user: User = Depends(current_user),
+    db: AsyncSession = Depends(get_session)
 ):
     if user.id is None:
         raise HTTPException(

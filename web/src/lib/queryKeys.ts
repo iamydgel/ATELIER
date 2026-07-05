@@ -6,4 +6,5 @@ export const QUERY_KEYS = {
   modelsCatalog: ['modelsCatalog'] as const,
   installStatus: (installId: string) => ['installStatus', installId] as const,
   observabilityStats: ['observabilityStats'] as const,
+  settings: ['settings'] as const,
 }

@@ -35,7 +35,9 @@ export default function Onboarding() {
 
   const handleNextStep = () => {
     if (step === 3) {
+      const selectedModel = catalog[0]?.id || 'llama3.1-8b-instruct-q4'
       localStorage.setItem('atelier:onboarded', 'true')
+      localStorage.setItem('atelier:chat:activeModel', selectedModel)
       navigate('/')
     } else {
       setStep(step + 1)

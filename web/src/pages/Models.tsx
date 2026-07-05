@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { Cpu, RotateCw, AlertTriangle } from 'lucide-react'
 import { toast } from 'sonner'
@@ -37,36 +37,41 @@ export default function Models() {
     retry: false,
   })
 
-  // Poll progress for active installations
+  // Keep a ref in sync with state to avoid stale closures in the interval
+  const activeInstallsRef = useRef<InstallProgressTracker>({})
   useEffect(() => {
-    const activeModelIds = Object.keys(activeInstalls)
-    if (activeModelIds.length === 0) return
+    activeInstallsRef.current = activeInstalls
+  }, [activeInstalls])
 
+  // Poll progress for active installations using ref to avoid stale closure
+  useEffect(() => {
     const timer = setInterval(async () => {
-      const updatedInstalls = { ...activeInstalls }
+      const currentInstalls = activeInstallsRef.current
+      const activeModelIds = Object.keys(currentInstalls)
+      if (activeModelIds.length === 0) return
+
+      const updatedInstalls = { ...currentInstalls }
       let hasChanges = false
 
       for (const modelId of activeModelIds) {
-        const { installId } = activeInstalls[modelId]
+        const { installId } = currentInstalls[modelId]
         try {
-          const status = await apiRequest(`/models/install/${installId}/status`)
-          
-          if (status.status === 'done') {
+          const installStatus = await apiRequest(`/models/install/${installId}/status`)
+
+          if (installStatus.status === 'done') {
             toast.success(`Modèle ${modelId} installé avec succès.`)
             delete updatedInstalls[modelId]
             hasChanges = true
-            // Invalidate query to refresh catalog statuses
             queryClient.invalidateQueries({ queryKey: QUERY_KEYS.modelsCatalog })
-          } else if (status.status === 'error') {
-            toast.error(`Erreur d'installation pour ${modelId} : ${status.error || 'inconnue'}`)
+          } else if (installStatus.status === 'error') {
+            toast.error(`Erreur d'installation pour ${modelId} : ${installStatus.error || 'inconnue'}`)
             delete updatedInstalls[modelId]
             hasChanges = true
             queryClient.invalidateQueries({ queryKey: QUERY_KEYS.modelsCatalog })
           } else {
-            // Update progress value (mocked or actual backend increment)
             updatedInstalls[modelId] = {
               installId,
-              progress: status.progress || 0,
+              progress: installStatus.progress || 0,
             }
             hasChanges = true
           }
@@ -81,7 +86,7 @@ export default function Models() {
     }, 1500)
 
     return () => clearInterval(timer)
-  }, [activeInstalls, queryClient])
+  }, [queryClient]) // stable deps only — reads ref for current installs
 
   // Install mutation
   const installMutation = useMutation({

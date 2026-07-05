@@ -7,6 +7,7 @@ from loguru import logger
 from app.api.v1.auth import router as auth_router
 from app.api.v1.chat import router as chat_router
 from app.api.v1.models import router as models_router
+from app.api.v1.settings import router as settings_router
 from app.core.db.session import init_db
 
 
@@ -35,6 +36,7 @@ app.add_middleware(
 app.include_router(auth_router)
 app.include_router(chat_router)
 app.include_router(models_router)
+app.include_router(settings_router)
 
 @app.get("/healthz")
 async def healthz():

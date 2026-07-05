@@ -20,7 +20,9 @@ export default function Chat() {
 
   // Input text composer state
   const [inputMessage, setInputMessage] = useState('')
-  const [activeModel, setActiveModel] = useState('llama3.1-8b-instruct-q4')
+  const [activeModel, setActiveModel] = useState<string>(() => {
+    return localStorage.getItem('atelier:chat:activeModel') || 'llama3.1-8b-instruct-q4'
+  })
   
   // Streaming state
   const [isStreaming, setIsStreaming] = useState(false)
@@ -49,6 +51,10 @@ export default function Chat() {
   useEffect(() => {
     localStorage.setItem('atelier:inference:max_tokens', maxTokens.toString())
   }, [maxTokens])
+
+  useEffect(() => {
+    localStorage.setItem('atelier:chat:activeModel', activeModel)
+  }, [activeModel])
 
   // Query conversations list
   const { refetch: refetchConversations } = useQuery<Conversation[]>({
