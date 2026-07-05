@@ -129,6 +129,8 @@ class InferenceDriver:
 def get_inference_driver() -> InferenceDriver:
     if settings.LOCALAI_INFERENCE_BACKEND == "ollama":
         base_url = "http://localhost:11434"
+    elif settings.LOCALAI_INFERENCE_BACKEND == "lmstudio":
+        base_url = f"http://{settings.LMSTUDIO_HOST}:{settings.LMSTUDIO_PORT}"
     else:
         # Default is llamacpp
         base_url = f"http://{settings.LLAMACPP_HOST}:{settings.LLAMACPP_PORT}"
