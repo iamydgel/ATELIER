@@ -1,0 +1,428 @@
+[
+  {
+    "name": "airbnb",
+    "description": "Airbnb Inspired Design System Analysis",
+    "has_design_md": true,
+    "path": "C:\\Users\\emsjo\\.gemini\\config\\plugins\\awesome-design-md\\skills\\awesome-design-md\\resources\\design-md\\airbnb"
+  },
+  {
+    "name": "airtable",
+    "description": "Airtable Inspired Design System Analysis",
+    "has_design_md": true,
+    "path": "C:\\Users\\emsjo\\.gemini\\config\\plugins\\awesome-design-md\\skills\\awesome-design-md\\resources\\design-md\\airtable"
+  },
+  {
+    "name": "apple",
+    "description": "Apple Inspired Design System Analysis",
+    "has_design_md": true,
+    "path": "C:\\Users\\emsjo\\.gemini\\config\\plugins\\awesome-design-md\\skills\\awesome-design-md\\resources\\design-md\\apple"
+  },
+  {
+    "name": "binance",
+    "description": "Binance Inspired Design System Analysis",
+    "has_design_md": true,
+    "path": "C:\\Users\\emsjo\\.gemini\\config\\plugins\\awesome-design-md\\skills\\awesome-design-md\\resources\\design-md\\binance"
+  },
+  {
+    "name": "bmw",
+    "description": "Bmw Inspired Design System Analysis",
+    "has_design_md": true,
+    "path": "C:\\Users\\emsjo\\.gemini\\config\\plugins\\awesome-design-md\\skills\\awesome-design-md\\resources\\design-md\\bmw"
+  },
+  {
+    "name": "bmw-m",
+    "description": "Bmw-m Inspired Design System Analysis",
+    "has_design_md": true,
+    "path": "C:\\Users\\emsjo\\.gemini\\config\\plugins\\awesome-design-md\\skills\\awesome-design-md\\resources\\design-md\\bmw-m"
+  },
+  {
+    "name": "bugatti",
+    "description": "Bugatti Inspired Design System Analysis",
+    "has_design_md": true,
+    "path": "C:\\Users\\emsjo\\.gemini\\config\\plugins\\awesome-design-md\\skills\\awesome-design-md\\resources\\design-md\\bugatti"
+  },
+  {
+    "name": "cal",
+    "description": "Cal Inspired Design System Analysis",
+    "has_design_md": true,
+    "path": "C:\\Users\\emsjo\\.gemini\\config\\plugins\\awesome-design-md\\skills\\awesome-design-md\\resources\\design-md\\cal"
+  },
+  {
+    "name": "claude",
+    "description": "Claude Inspired Design System Analysis",
+    "has_design_md": true,
+    "path": "C:\\Users\\emsjo\\.gemini\\config\\plugins\\awesome-design-md\\skills\\awesome-design-md\\resources\\design-md\\claude"
+  },
+  {
+    "name": "clay",
+    "description": "Clay Inspired Design System Analysis",
+    "has_design_md": true,
+    "path": "C:\\Users\\emsjo\\.gemini\\config\\plugins\\awesome-design-md\\skills\\awesome-design-md\\resources\\design-md\\clay"
+  },
+  {
+    "name": "clickhouse",
+    "description": "ClickHouse Inspired Design System Analysis",
+    "has_design_md": true,
+    "path": "C:\\Users\\emsjo\\.gemini\\config\\plugins\\awesome-design-md\\skills\\awesome-design-md\\resources\\design-md\\clickhouse"
+  },
+  {
+    "name": "cohere",
+    "description": "Cohere Inspired Design System Analysis",
+    "has_design_md": true,
+    "path": "C:\\Users\\emsjo\\.gemini\\config\\plugins\\awesome-design-md\\skills\\awesome-design-md\\resources\\design-md\\cohere"
+  },
+  {
+    "name": "coinbase",
+    "description": "Coinbase Inspired Design System Analysis",
+    "has_design_md": true,
+    "path": "C:\\Users\\emsjo\\.gemini\\config\\plugins\\awesome-design-md\\skills\\awesome-design-md\\resources\\design-md\\coinbase"
+  },
+  {
+    "name": "composio",
+    "description": "Composio Inspired Design System Analysis",
+    "has_design_md": true,
+    "path": "C:\\Users\\emsjo\\.gemini\\config\\plugins\\awesome-design-md\\skills\\awesome-design-md\\resources\\design-md\\composio"
+  },
+  {
+    "name": "cursor",
+    "description": "Cursor Inspired Design System Analysis",
+    "has_design_md": true,
+    "path": "C:\\Users\\emsjo\\.gemini\\config\\plugins\\awesome-design-md\\skills\\awesome-design-md\\resources\\design-md\\cursor"
+  },
+  {
+    "name": "elevenlabs",
+    "description": "Elevenlabs Inspired Design System Analysis",
+    "has_design_md": true,
+    "path": "C:\\Users\\emsjo\\.gemini\\config\\plugins\\awesome-design-md\\skills\\awesome-design-md\\resources\\design-md\\elevenlabs"
+  },
+  {
+    "name": "expo",
+    "description": "Expo Inspired Design System Analysis",
+    "has_design_md": true,
+    "path": "C:\\Users\\emsjo\\.gemini\\config\\plugins\\awesome-design-md\\skills\\awesome-design-md\\resources\\design-md\\expo"
+  },
+  {
+    "name": "ferrari",
+    "description": "Ferrari Inspired Design System Analysis",
+    "has_design_md": true,
+    "path": "C:\\Users\\emsjo\\.gemini\\config\\plugins\\awesome-design-md\\skills\\awesome-design-md\\resources\\design-md\\ferrari"
+  },
+  {
+    "name": "figma",
+    "description": "Figma Inspired Design System Analysis",
+    "has_design_md": true,
+    "path": "C:\\Users\\emsjo\\.gemini\\config\\plugins\\awesome-design-md\\skills\\awesome-design-md\\resources\\design-md\\figma"
+  },
+  {
+    "name": "framer",
+    "description": "Framer Inspired Design System Analysis",
+    "has_design_md": true,
+    "path": "C:\\Users\\emsjo\\.gemini\\config\\plugins\\awesome-design-md\\skills\\awesome-design-md\\resources\\design-md\\framer"
+  },
+  {
+    "name": "hashicorp",
+    "description": "HashiCorp Inspired Design System Analysis",
+    "has_design_md": true,
+    "path": "C:\\Users\\emsjo\\.gemini\\config\\plugins\\awesome-design-md\\skills\\awesome-design-md\\resources\\design-md\\hashicorp"
+  },
+  {
+    "name": "ibm",
+    "description": "IBM Inspired Design System Analysis",
+    "has_design_md": true,
+    "path": "C:\\Users\\emsjo\\.gemini\\config\\plugins\\awesome-design-md\\skills\\awesome-design-md\\resources\\design-md\\ibm"
+  },
+  {
+    "name": "intercom",
+    "description": "Intercom Inspired Design System Analysis",
+    "has_design_md": true,
+    "path": "C:\\Users\\emsjo\\.gemini\\config\\plugins\\awesome-design-md\\skills\\awesome-design-md\\resources\\design-md\\intercom"
+  },
+  {
+    "name": "kraken",
+    "description": "Kraken Inspired Design System Analysis",
+    "has_design_md": true,
+    "path": "C:\\Users\\emsjo\\.gemini\\config\\plugins\\awesome-design-md\\skills\\awesome-design-md\\resources\\design-md\\kraken"
+  },
+  {
+    "name": "lamborghini",
+    "description": "Lamborghini Inspired Design System Analysis",
+    "has_design_md": true,
+    "path": "C:\\Users\\emsjo\\.gemini\\config\\plugins\\awesome-design-md\\skills\\awesome-design-md\\resources\\design-md\\lamborghini"
+  },
+  {
+    "name": "linear.app",
+    "description": "Linear Inspired Design System Analysis",
+    "has_design_md": true,
+    "path": "C:\\Users\\emsjo\\.gemini\\config\\plugins\\awesome-design-md\\skills\\awesome-design-md\\resources\\design-md\\linear.app"
+  },
+  {
+    "name": "lovable",
+    "description": "Lovable Inspired Design System Analysis",
+    "has_design_md": true,
+    "path": "C:\\Users\\emsjo\\.gemini\\config\\plugins\\awesome-design-md\\skills\\awesome-design-md\\resources\\design-md\\lovable"
+  },
+  {
+    "name": "mastercard",
+    "description": "Mastercard Inspired Design System Analysis",
+    "has_design_md": true,
+    "path": "C:\\Users\\emsjo\\.gemini\\config\\plugins\\awesome-design-md\\skills\\awesome-design-md\\resources\\design-md\\mastercard"
+  },
+  {
+    "name": "meta",
+    "description": "Meta Inspired Design System Analysis",
+    "has_design_md": true,
+    "path": "C:\\Users\\emsjo\\.gemini\\config\\plugins\\awesome-design-md\\skills\\awesome-design-md\\resources\\design-md\\meta"
+  },
+  {
+    "name": "minimax",
+    "description": "Minimax Inspired Design System Analysis",
+    "has_design_md": true,
+    "path": "C:\\Users\\emsjo\\.gemini\\config\\plugins\\awesome-design-md\\skills\\awesome-design-md\\resources\\design-md\\minimax"
+  },
+  {
+    "name": "mintlify",
+    "description": "Mintlify Inspired Design System Analysis",
+    "has_design_md": true,
+    "path": "C:\\Users\\emsjo\\.gemini\\config\\plugins\\awesome-design-md\\skills\\awesome-design-md\\resources\\design-md\\mintlify"
+  },
+  {
+    "name": "miro",
+    "description": "Miro Inspired Design System Analysis",
+    "has_design_md": true,
+    "path": "C:\\Users\\emsjo\\.gemini\\config\\plugins\\awesome-design-md\\skills\\awesome-design-md\\resources\\design-md\\miro"
+  },
+  {
+    "name": "mistral.ai",
+    "description": "Mistral AI Inspired Design System Analysis",
+    "has_design_md": true,
+    "path": "C:\\Users\\emsjo\\.gemini\\config\\plugins\\awesome-design-md\\skills\\awesome-design-md\\resources\\design-md\\mistral.ai"
+  },
+  {
+    "name": "mongodb",
+    "description": "Mongodb Inspired Design System Analysis",
+    "has_design_md": true,
+    "path": "C:\\Users\\emsjo\\.gemini\\config\\plugins\\awesome-design-md\\skills\\awesome-design-md\\resources\\design-md\\mongodb"
+  },
+  {
+    "name": "nike",
+    "description": "Nike Inspired Design System Analysis",
+    "has_design_md": true,
+    "path": "C:\\Users\\emsjo\\.gemini\\config\\plugins\\awesome-design-md\\skills\\awesome-design-md\\resources\\design-md\\nike"
+  },
+  {
+    "name": "notion",
+    "description": "Notion Inspired Design System Analysis",
+    "has_design_md": true,
+    "path": "C:\\Users\\emsjo\\.gemini\\config\\plugins\\awesome-design-md\\skills\\awesome-design-md\\resources\\design-md\\notion"
+  },
+  {
+    "name": "nvidia",
+    "description": "NVIDIA Inspired Design System Analysis",
+    "has_design_md": true,
+    "path": "C:\\Users\\emsjo\\.gemini\\config\\plugins\\awesome-design-md\\skills\\awesome-design-md\\resources\\design-md\\nvidia"
+  },
+  {
+    "name": "ollama",
+    "description": "Ollama Inspired Design System Analysis",
+    "has_design_md": true,
+    "path": "C:\\Users\\emsjo\\.gemini\\config\\plugins\\awesome-design-md\\skills\\awesome-design-md\\resources\\design-md\\ollama"
+  },
+  {
+    "name": "opencode.ai",
+    "description": "OpenCode AI Inspired Design System Analysis",
+    "has_design_md": true,
+    "path": "C:\\Users\\emsjo\\.gemini\\config\\plugins\\awesome-design-md\\skills\\awesome-design-md\\resources\\design-md\\opencode.ai"
+  },
+  {
+    "name": "pinterest",
+    "description": "Pinterest Inspired Design System Analysis",
+    "has_design_md": true,
+    "path": "C:\\Users\\emsjo\\.gemini\\config\\plugins\\awesome-design-md\\skills\\awesome-design-md\\resources\\design-md\\pinterest"
+  },
+  {
+    "name": "playstation",
+    "description": "Playstation Inspired Design System Analysis",
+    "has_design_md": true,
+    "path": "C:\\Users\\emsjo\\.gemini\\config\\plugins\\awesome-design-md\\skills\\awesome-design-md\\resources\\design-md\\playstation"
+  },
+  {
+    "name": "posthog",
+    "description": "Posthog Inspired Design System Analysis",
+    "has_design_md": true,
+    "path": "C:\\Users\\emsjo\\.gemini\\config\\plugins\\awesome-design-md\\skills\\awesome-design-md\\resources\\design-md\\posthog"
+  },
+  {
+    "name": "raycast",
+    "description": "Raycast Inspired Design System Analysis",
+    "has_design_md": true,
+    "path": "C:\\Users\\emsjo\\.gemini\\config\\plugins\\awesome-design-md\\skills\\awesome-design-md\\resources\\design-md\\raycast"
+  },
+  {
+    "name": "renault",
+    "description": "Renault Inspired Design System Analysis",
+    "has_design_md": true,
+    "path": "C:\\Users\\emsjo\\.gemini\\config\\plugins\\awesome-design-md\\skills\\awesome-design-md\\resources\\design-md\\renault"
+  },
+  {
+    "name": "replicate",
+    "description": "Replicate Inspired Design System Analysis",
+    "has_design_md": true,
+    "path": "C:\\Users\\emsjo\\.gemini\\config\\plugins\\awesome-design-md\\skills\\awesome-design-md\\resources\\design-md\\replicate"
+  },
+  {
+    "name": "resend",
+    "description": "Resend Inspired Design System Analysis",
+    "has_design_md": true,
+    "path": "C:\\Users\\emsjo\\.gemini\\config\\plugins\\awesome-design-md\\skills\\awesome-design-md\\resources\\design-md\\resend"
+  },
+  {
+    "name": "revolut",
+    "description": "Revolut Inspired Design System Analysis",
+    "has_design_md": true,
+    "path": "C:\\Users\\emsjo\\.gemini\\config\\plugins\\awesome-design-md\\skills\\awesome-design-md\\resources\\design-md\\revolut"
+  },
+  {
+    "name": "runwayml",
+    "description": "RunwayML Inspired Design System Analysis",
+    "has_design_md": true,
+    "path": "C:\\Users\\emsjo\\.gemini\\config\\plugins\\awesome-design-md\\skills\\awesome-design-md\\resources\\design-md\\runwayml"
+  },
+  {
+    "name": "sanity",
+    "description": "Sanity Inspired Design System Analysis",
+    "has_design_md": true,
+    "path": "C:\\Users\\emsjo\\.gemini\\config\\plugins\\awesome-design-md\\skills\\awesome-design-md\\resources\\design-md\\sanity"
+  },
+  {
+    "name": "sentry",
+    "description": "Sentry Inspired Design System Analysis",
+    "has_design_md": true,
+    "path": "C:\\Users\\emsjo\\.gemini\\config\\plugins\\awesome-design-md\\skills\\awesome-design-md\\resources\\design-md\\sentry"
+  },
+  {
+    "name": "shopify",
+    "description": "Shopify Inspired Design System Analysis",
+    "has_design_md": true,
+    "path": "C:\\Users\\emsjo\\.gemini\\config\\plugins\\awesome-design-md\\skills\\awesome-design-md\\resources\\design-md\\shopify"
+  },
+  {
+    "name": "slack",
+    "description": "",
+    "has_design_md": true,
+    "path": "C:\\Users\\emsjo\\.gemini\\config\\plugins\\awesome-design-md\\skills\\awesome-design-md\\resources\\design-md\\slack"
+  },
+  {
+    "name": "spacex",
+    "description": "Spacex Inspired Design System Analysis",
+    "has_design_md": true,
+    "path": "C:\\Users\\emsjo\\.gemini\\config\\plugins\\awesome-design-md\\skills\\awesome-design-md\\resources\\design-md\\spacex"
+  },
+  {
+    "name": "spotify",
+    "description": "Spotify Inspired Design System Analysis",
+    "has_design_md": true,
+    "path": "C:\\Users\\emsjo\\.gemini\\config\\plugins\\awesome-design-md\\skills\\awesome-design-md\\resources\\design-md\\spotify"
+  },
+  {
+    "name": "starbucks",
+    "description": "Starbucks Inspired Design System Analysis",
+    "has_design_md": true,
+    "path": "C:\\Users\\emsjo\\.gemini\\config\\plugins\\awesome-design-md\\skills\\awesome-design-md\\resources\\design-md\\starbucks"
+  },
+  {
+    "name": "stripe",
+    "description": "Stripe Inspired Design System Analysis",
+    "has_design_md": true,
+    "path": "C:\\Users\\emsjo\\.gemini\\config\\plugins\\awesome-design-md\\skills\\awesome-design-md\\resources\\design-md\\stripe"
+  },
+  {
+    "name": "supabase",
+    "description": "Supabase Inspired Design System Analysis",
+    "has_design_md": true,
+    "path": "C:\\Users\\emsjo\\.gemini\\config\\plugins\\awesome-design-md\\skills\\awesome-design-md\\resources\\design-md\\supabase"
+  },
+  {
+    "name": "superhuman",
+    "description": "Superhuman Inspired Design System Analysis",
+    "has_design_md": true,
+    "path": "C:\\Users\\emsjo\\.gemini\\config\\plugins\\awesome-design-md\\skills\\awesome-design-md\\resources\\design-md\\superhuman"
+  },
+  {
+    "name": "tesla",
+    "description": "Tesla Inspired Design System Analysis",
+    "has_design_md": true,
+    "path": "C:\\Users\\emsjo\\.gemini\\config\\plugins\\awesome-design-md\\skills\\awesome-design-md\\resources\\design-md\\tesla"
+  },
+  {
+    "name": "theverge",
+    "description": "Theverge Inspired Design System Analysis",
+    "has_design_md": true,
+    "path": "C:\\Users\\emsjo\\.gemini\\config\\plugins\\awesome-design-md\\skills\\awesome-design-md\\resources\\design-md\\theverge"
+  },
+  {
+    "name": "together.ai",
+    "description": "Together AI Inspired Design System Analysis",
+    "has_design_md": true,
+    "path": "C:\\Users\\emsjo\\.gemini\\config\\plugins\\awesome-design-md\\skills\\awesome-design-md\\resources\\design-md\\together.ai"
+  },
+  {
+    "name": "uber",
+    "description": "Uber Inspired Design System Analysis",
+    "has_design_md": true,
+    "path": "C:\\Users\\emsjo\\.gemini\\config\\plugins\\awesome-design-md\\skills\\awesome-design-md\\resources\\design-md\\uber"
+  },
+  {
+    "name": "vercel",
+    "description": "Vercel Inspired Design System Analysis",
+    "has_design_md": true,
+    "path": "C:\\Users\\emsjo\\.gemini\\config\\plugins\\awesome-design-md\\skills\\awesome-design-md\\resources\\design-md\\vercel"
+  },
+  {
+    "name": "vodafone",
+    "description": "Vodafone Inspired Design System Analysis",
+    "has_design_md": true,
+    "path": "C:\\Users\\emsjo\\.gemini\\config\\plugins\\awesome-design-md\\skills\\awesome-design-md\\resources\\design-md\\vodafone"
+  },
+  {
+    "name": "voltagent",
+    "description": "VoltAgent Inspired Design System Analysis",
+    "has_design_md": true,
+    "path": "C:\\Users\\emsjo\\.gemini\\config\\plugins\\awesome-design-md\\skills\\awesome-design-md\\resources\\design-md\\voltagent"
+  },
+  {
+    "name": "warp",
+    "description": "Warp Inspired Design System Analysis",
+    "has_design_md": true,
+    "path": "C:\\Users\\emsjo\\.gemini\\config\\plugins\\awesome-design-md\\skills\\awesome-design-md\\resources\\design-md\\warp"
+  },
+  {
+    "name": "webflow",
+    "description": "Webflow Inspired Design System Analysis",
+    "has_design_md": true,
+    "path": "C:\\Users\\emsjo\\.gemini\\config\\plugins\\awesome-design-md\\skills\\awesome-design-md\\resources\\design-md\\webflow"
+  },
+  {
+    "name": "wired",
+    "description": "Wired Inspired Design System Analysis",
+    "has_design_md": true,
+    "path": "C:\\Users\\emsjo\\.gemini\\config\\plugins\\awesome-design-md\\skills\\awesome-design-md\\resources\\design-md\\wired"
+  },
+  {
+    "name": "wise",
+    "description": "Wise Inspired Design System Analysis",
+    "has_design_md": true,
+    "path": "C:\\Users\\emsjo\\.gemini\\config\\plugins\\awesome-design-md\\skills\\awesome-design-md\\resources\\design-md\\wise"
+  },
+  {
+    "name": "x.ai",
+    "description": "xAI Inspired Design System Analysis",
+    "has_design_md": true,
+    "path": "C:\\Users\\emsjo\\.gemini\\config\\plugins\\awesome-design-md\\skills\\awesome-design-md\\resources\\design-md\\x.ai"
+  },
+  {
+    "name": "zapier",
+    "description": "Zapier Inspired Design System Analysis",
+    "has_design_md": true,
+    "path": "C:\\Users\\emsjo\\.gemini\\config\\plugins\\awesome-design-md\\skills\\awesome-design-md\\resources\\design-md\\zapier"
+  }
+]

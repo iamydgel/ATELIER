@@ -1,0 +1,26 @@
+# Specs sources (excluded per user request)
+DIRECTION-ARTISTIQUE-Plateforme-IA-Locaux.md
+MERISE-Plateforme-IA-Locaux.md
+PRD-Plateforme-IA-Locaux.md
+SPEC-TECHNIQUE-Plateforme-IA-Locaux.md
+
+# Virtual environment
+.venv/
+__pycache__/
+*.pyc
+
+# Local Database
+localai.db
+localai.db-wal
+localai.db-shm
+
+# Node
+node_modules/
+dist/
+
+# IDE & Logs
+.idea/
+.vscode/
+.gemini/
+*.log
+localai.egg-info/
