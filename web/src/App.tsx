@@ -83,6 +83,24 @@ function MainApp() {
     enabled: !!user,
   })
 
+  // Fetch models from backend
+  const { data: models = [] } = useQuery<string[]>({
+    queryKey: ['models'],
+    queryFn: async () => {
+      const res = await fetch(`${API_BASE}/chat/models`, { credentials: 'include' })
+      if (!res.ok) throw new Error('Failed to fetch models')
+      return res.json()
+    },
+    enabled: !!user,
+  })
+
+  // Automatically update active model when models are loaded
+  useEffect(() => {
+    if (models.length > 0 && !models.includes(activeModel)) {
+      setActiveModel(models[0])
+    }
+  }, [models, activeModel])
+
   // Fetch messages for active conversation
   const { data: messages = [], refetch: refetchMessages } = useQuery<Message[]>({
     queryKey: ['messages', selectedConvoId],
@@ -291,10 +309,18 @@ function MainApp() {
             <select
               value={activeModel}
               onChange={(e) => setActiveModel(e.target.value)}
-              className="bg-bg-1 border border-line-1 text-sm rounded-md py-1 px-2.5 text-text-2 focus:outline-none focus:border-line-2 font-mono"
+              className="bg-bg-1 border border-line-1 text-sm rounded-md py-1 px-2.5 text-text-2 focus:outline-none focus:border-line-2 font-mono max-w-[240px] truncate"
             >
-              <option value="llama3.1-8b-instruct-q4">llama3.1-8b-instruct-q4</option>
-              <option value="mistral-7b-instruct-v0.3">mistral-7b-instruct-v0.3</option>
+              {models.length > 0 ? (
+                models.map(m => (
+                  <option key={m} value={m}>{m}</option>
+                ))
+              ) : (
+                <>
+                  <option value="llama3.1-8b-instruct-q4">llama3.1-8b-instruct-q4</option>
+                  <option value="mistral-7b-instruct-v0.3">mistral-7b-instruct-v0.3</option>
+                </>
+              )}
             </select>
           </div>
           
