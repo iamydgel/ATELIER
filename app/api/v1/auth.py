@@ -74,6 +74,12 @@ async def login(payload: UserLogin, response: Response, db: AsyncSession = Depen
         )
     
     # Create new session
+    if user.id is None:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Erreur lors de la récupération de l'utilisateur."
+        )
+        
     session_id = secrets.token_urlsafe(32)
     expires_at = datetime.now(timezone.utc).replace(tzinfo=None) + timedelta(hours=settings.LOCALAI_SESSION_TTL_HOURS)
     

@@ -1,5 +1,4 @@
 from datetime import datetime, timezone
-from typing import Any
 import uuid
 from sqlmodel import Field, SQLModel
 
@@ -7,7 +6,7 @@ def utc_now() -> datetime:
     return datetime.now(timezone.utc).replace(tzinfo=None)
 
 class User(SQLModel, table=True):
-    __tablename__: Any = "user"
+    __tablename__ = "user"  # type: ignore
     id: int | None = Field(default=None, primary_key=True)
     email: str = Field(unique=True, index=True)
     password_hash: str
@@ -17,7 +16,7 @@ class User(SQLModel, table=True):
     created_at: datetime = Field(default_factory=utc_now)
 
 class Session(SQLModel, table=True):
-    __tablename__: Any = "session"
+    __tablename__ = "session"  # type: ignore
     id: str = Field(primary_key=True)  # session identifier (e.g. secure token)
     user_id: int = Field(foreign_key="user.id", index=True)
     created_at: datetime = Field(default_factory=utc_now)
@@ -26,7 +25,7 @@ class Session(SQLModel, table=True):
     user_agent: str | None = None
 
 class Conversation(SQLModel, table=True):
-    __tablename__: Any = "conversation"
+    __tablename__ = "conversation"  # type: ignore
     id: str = Field(default_factory=lambda: str(uuid.uuid4()), primary_key=True)
     user_id: int = Field(foreign_key="user.id", index=True)
     title: str
@@ -38,7 +37,7 @@ class Conversation(SQLModel, table=True):
     archived_at: datetime | None = None
 
 class Message(SQLModel, table=True):
-    __tablename__: Any = "message"
+    __tablename__ = "message"  # type: ignore
     id: str = Field(default_factory=lambda: str(uuid.uuid4()), primary_key=True)
     conversation_id: str = Field(foreign_key="conversation.id", index=True)
     role: str  # system, user, assistant, tool
@@ -50,7 +49,7 @@ class Message(SQLModel, table=True):
     created_at: datetime = Field(default_factory=utc_now, index=True)
 
 class Model(SQLModel, table=True):
-    __tablename__: Any = "model"
+    __tablename__ = "model"  # type: ignore
     id: str = Field(primary_key=True)            # e.g., "llama3.1-8b-instruct-q4"
     family: str
     version: str
@@ -63,7 +62,7 @@ class Model(SQLModel, table=True):
     requires_vram_gb: int | None = None
 
 class InstalledModel(SQLModel, table=True):
-    __tablename__: Any = "installed_model"
+    __tablename__ = "installed_model"  # type: ignore
     model_id: str = Field(foreign_key="model.id", primary_key=True)
     path: str
     installed_at: datetime = Field(default_factory=utc_now)
@@ -71,7 +70,7 @@ class InstalledModel(SQLModel, table=True):
     device: str | None = None
 
 class AuditLog(SQLModel, table=True):
-    __tablename__: Any = "audit_log"
+    __tablename__ = "audit_log"  # type: ignore
     id: int | None = Field(default=None, primary_key=True)
     ts: datetime = Field(default_factory=utc_now, index=True)
     actor_user_id_hash: str | None = None
