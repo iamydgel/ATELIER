@@ -22,6 +22,7 @@ import {
   ChevronRight,
 } from 'lucide-react'
 import { Toaster, toast } from 'sonner'
+import { ChatStream } from './components/ChatStream'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -346,20 +347,7 @@ function MainApp() {
               </div>
             ))}
 
-            {/* Streamed caret component placeholder */}
-            {isStreaming && streamedText && (
-              <div className="py-4 border-l-4 pl-4 border-accent-cool bg-bg-1/40">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-xs text-text-3 font-mono uppercase tracking-wider">
-                    L'Atelier
-                  </span>
-                </div>
-                <div className="text-text-1 text-base leading-relaxed whitespace-pre-wrap">
-                  {streamedText}
-                  <span className="inline-block w-1.5 h-4 bg-accent-cool ml-1 animate-pulse-slow align-middle"></span>
-                </div>
-              </div>
-            )}
+            <ChatStream text={streamedText} isStreaming={isStreaming} />
             
             <div ref={chatEndRef} />
           </div>
