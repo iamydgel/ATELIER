@@ -1,11 +1,10 @@
-from datetime import datetime, timedelta, timezone
-import secrets
-from typing import Optional
+from datetime import UTC, datetime
+
+from argon2 import PasswordHasher
+from argon2.exceptions import VerifyMismatchError
 from fastapi import Depends, HTTPException, status
 from fastapi.security import APIKeyCookie
 from itsdangerous import BadSignature, Signer
-from argon2 import PasswordHasher
-from argon2.exceptions import VerifyMismatchError
 from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
@@ -31,7 +30,7 @@ def verify_password(password_hash: str, password: str) -> bool:
 def sign_session_id(session_id: str) -> str:
     return signer.sign(session_id.encode()).decode()
 
-def unsign_session_id(signed_id: str) -> Optional[str]:
+def unsign_session_id(signed_id: str) -> str | None:
     try:
         return signer.unsign(signed_id.encode()).decode()
     except BadSignature:
@@ -41,7 +40,7 @@ def unsign_session_id(signed_id: str) -> Optional[str]:
 cookie_security = APIKeyCookie(name=SESSION_COOKIE_NAME, auto_error=False)
 
 async def current_user(
-    cookie: Optional[str] = Depends(cookie_security),
+    cookie: str | None = Depends(cookie_security),
     db: AsyncSession = Depends(get_session)
 ) -> User:
     if not cookie:
@@ -66,7 +65,7 @@ async def current_user(
             detail="Session inexistante ou expirée."
         )
     
-    if db_session.expires_at < datetime.now(timezone.utc).replace(tzinfo=None):
+    if db_session.expires_at < datetime.now(UTC).replace(tzinfo=None):
         await db.delete(db_session)
         await db.commit()
         raise HTTPException(

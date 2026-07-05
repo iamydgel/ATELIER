@@ -1,5 +1,5 @@
 from sqlalchemy import text
-from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
+from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 from sqlmodel import SQLModel
 from sqlmodel.ext.asyncio.session import AsyncSession
 
@@ -21,8 +21,68 @@ async def get_session():
 
 async def init_db():
     async with engine.begin() as conn:
-        from app.core.db.models import User, Session, Conversation, Message, Model, InstalledModel, AuditLog
+        from app.core.db.models import (
+            Model,
+        )
         await conn.run_sync(SQLModel.metadata.create_all)
         
         await conn.execute(text("PRAGMA journal_mode=WAL;"))
         await conn.execute(text("PRAGMA foreign_keys=ON;"))
+
+    # Seed default models if not already present
+    from sqlmodel import select
+
+    from app.core.db.models import Model
+    async with async_session_maker() as session:
+        result = await session.exec(select(Model))
+        if not result.first():
+            models_seed = [
+                Model(
+                    id="llama3.1-8b-instruct-q4",
+                    family="Llama 3.1",
+                    version="8B",
+                    quant="Q4_K_M",
+                    modality="text",
+                    license="Llama 3.1 Community",
+                    source_url="https://huggingface.co/lmstudio-community/Meta-Llama-3.1-8B-Instruct-GGUF",
+                    size_bytes=4780000000,
+                    requires_vram_gb=8
+                ),
+                Model(
+                    id="mistral-7b-instruct-v0.3",
+                    family="Mistral",
+                    version="7B",
+                    quant="Q4_K_M",
+                    modality="text",
+                    license="Apache 2.0",
+                    source_url="https://huggingface.co/lmstudio-community/Mistral-7B-Instruct-v0.3-GGUF",
+                    size_bytes=4140000000,
+                    requires_vram_gb=6
+                ),
+                Model(
+                    id="gemma-2-9b-it",
+                    family="Gemma 2",
+                    version="9B",
+                    quant="Q4_K_M",
+                    modality="text",
+                    license="Gemma License",
+                    source_url="https://huggingface.co/lmstudio-community/gemma-2-9b-it-GGUF",
+                    size_bytes=5500000000,
+                    requires_vram_gb=10
+                ),
+                Model(
+                    id="phi-3-mini-128k-instruct",
+                    family="Phi 3",
+                    version="3.8B",
+                    quant="Q4_K_M",
+                    modality="text",
+                    license="MIT",
+                    source_url="https://huggingface.co/lmstudio-community/Phi-3-mini-128k-instruct-GGUF",
+                    size_bytes=2200000000,
+                    requires_vram_gb=4
+                )
+            ]
+            for m in models_seed:
+                session.add(m)
+            await session.commit()
+

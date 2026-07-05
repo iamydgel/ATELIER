@@ -1,5 +1,7 @@
 import os
+
 from pydantic_settings import BaseSettings
+
 
 class Settings(BaseSettings):
     LOCALAI_DATA_DIR: str = os.path.expanduser("~/.localai")

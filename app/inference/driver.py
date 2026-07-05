@@ -1,10 +1,12 @@
 import json
 import time
-from typing import AsyncGenerator, List, Dict, Any, Optional
+from collections.abc import AsyncGenerator
+
 import httpx
 from pydantic import BaseModel
 
 from app.core.config import settings
+
 
 class ChatChoiceMessage(BaseModel):
     role: str
@@ -12,7 +14,7 @@ class ChatChoiceMessage(BaseModel):
 
 class ChatChoice(BaseModel):
     message: ChatChoiceMessage
-    finish_reason: Optional[str] = None
+    finish_reason: str | None = None
 
 class ChatUsage(BaseModel):
     prompt_tokens: int = 0
@@ -20,28 +22,56 @@ class ChatUsage(BaseModel):
     total_tokens: int = 0
 
 class ChatResponse(BaseModel):
-    choices: List[ChatChoice]
+    choices: list[ChatChoice]
     usage: ChatUsage
     latency_ms: int = 0
 
 class StreamChoiceDelta(BaseModel):
-    role: Optional[str] = None
-    content: Optional[str] = ""
+    role: str | None = None
+    content: str | None = ""
 
 class StreamChoice(BaseModel):
     delta: StreamChoiceDelta
-    finish_reason: Optional[str] = None
+    finish_reason: str | None = None
 
 class StreamChunk(BaseModel):
-    choices: List[StreamChoice]
-    usage: Optional[ChatUsage] = None
+    choices: list[StreamChoice]
+    usage: ChatUsage | None = None
 
 class InferenceDriver:
     def __init__(self, base_url: str):
         self.base_url = base_url.rstrip("/")
         self.client = httpx.AsyncClient(timeout=60.0)
 
-    async def chat(self, model: str, messages: List[Dict[str, str]], temperature: float = 0.7, max_tokens: int = 2048) -> ChatResponse:
+    async def get_models(self) -> list[str]:
+        # Try OpenAI standard /v1/models first, fallback to /api/v1/models
+        url = f"{self.base_url}/v1/models"
+        try:
+            response = await self.client.get(url, timeout=5.0)
+            if response.status_code == 200:
+                data = response.json()
+                if "data" in data and isinstance(data["data"], list):
+                    return [m["id"] for m in data["data"] if "id" in m]
+                if "models" in data and isinstance(data["models"], list):
+                    return [m["id"] for m in data["models"] if "id" in m]
+        except Exception:
+            # Fallback to /api/v1/models (LM Studio specific)
+            url_lm = f"{self.base_url}/api/v1/models"
+            try:
+                response = await self.client.get(url_lm, timeout=5.0)
+                if response.status_code == 200:
+                    data = response.json()
+                    if "data" in data and isinstance(data["data"], list):
+                        return [m["id"] for m in data["data"] if "id" in m]
+                    if "models" in data and isinstance(data["models"], list):
+                        return [m["id"] for m in data["models"] if "id" in m]
+            except Exception:
+                pass
+        
+        # Fallback to hardcoded list if server is unreachable
+        return ["llama3.1-8b-instruct-q4", "mistral-7b-instruct-v0.3"]
+
+    async def chat(self, model: str, messages: list[dict[str, str]], temperature: float = 0.7, max_tokens: int = 2048) -> ChatResponse:
         url = f"{self.base_url}/v1/chat/completions"
         payload = {
             "model": model,
@@ -80,7 +110,7 @@ class InferenceDriver:
         
         return ChatResponse(choices=choices, usage=usage, latency_ms=latency_ms)
 
-    async def chat_stream(self, model: str, messages: List[Dict[str, str]], temperature: float = 0.7, max_tokens: int = 2048) -> AsyncGenerator[StreamChunk, None]:
+    async def chat_stream(self, model: str, messages: list[dict[str, str]], temperature: float = 0.7, max_tokens: int = 2048) -> AsyncGenerator[StreamChunk, None]:
         url = f"{self.base_url}/v1/chat/completions"
         payload = {
             "model": model,
@@ -115,7 +145,7 @@ class InferenceDriver:
                                 finish_reason=choice_data.get("finish_reason")
                             ))
                         usage = None
-                        if "usage" in data and data["usage"]:
+                        if data.get("usage"):
                             u = data["usage"]
                             usage = ChatUsage(
                                 prompt_tokens=u.get("prompt_tokens", 0),

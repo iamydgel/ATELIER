@@ -1,13 +1,21 @@
 import secrets
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
+
 from fastapi import APIRouter, Depends, HTTPException, Response, status
 from pydantic import BaseModel
 from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
-from app.core.auth import hash_password, verify_password, sign_session_id, SESSION_COOKIE_NAME, current_user
+from app.core.auth import (
+    SESSION_COOKIE_NAME,
+    current_user,
+    hash_password,
+    sign_session_id,
+    verify_password,
+)
 from app.core.config import settings
-from app.core.db.models import Session as DbSession, User
+from app.core.db.models import Session as DbSession
+from app.core.db.models import User
 from app.core.db.session import get_session
 
 router = APIRouter(prefix="/api/v1/auth", tags=["auth"])
@@ -81,7 +89,7 @@ async def login(payload: UserLogin, response: Response, db: AsyncSession = Depen
         )
         
     session_id = secrets.token_urlsafe(32)
-    expires_at = datetime.now(timezone.utc).replace(tzinfo=None) + timedelta(hours=settings.LOCALAI_SESSION_TTL_HOURS)
+    expires_at = datetime.now(UTC).replace(tzinfo=None) + timedelta(hours=settings.LOCALAI_SESSION_TTL_HOURS)
     
     session = DbSession(
         id=session_id,

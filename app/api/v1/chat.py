@@ -1,16 +1,18 @@
 import json
 import time
 import uuid
-from typing import List, Dict, Optional, Literal
+from datetime import UTC, datetime
+from typing import Literal
+
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
-from datetime import datetime, timezone
-from sqlmodel import select, desc, asc
+from sqlmodel import asc, desc, func, select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 from app.core.auth import current_user
-from app.core.db.models import Conversation, Message, User
+from app.core.config import settings
+from app.core.db.models import Conversation, InstalledModel, Message, User
 from app.core.db.session import get_session
 from app.inference.driver import get_inference_driver
 
@@ -22,8 +24,8 @@ class ChatRequestMessage(BaseModel):
 
 class ChatRequest(BaseModel):
     model: str
-    messages: List[ChatRequestMessage]
-    conversation_id: Optional[str] = None
+    messages: list[ChatRequestMessage]
+    conversation_id: str | None = None
     temperature: float = 0.7
     max_tokens: int = 2048
 
@@ -33,7 +35,7 @@ class ChatResponseChoice(BaseModel):
 
 class ChatResponse(BaseModel):
     conversation_id: str
-    choices: List[ChatResponseChoice]
+    choices: list[ChatResponseChoice]
     latency_ms: int
 
 class ConversationResponse(BaseModel):
@@ -48,6 +50,11 @@ class MessageResponse(BaseModel):
     role: str
     content: str
     created_at: float
+
+@router.get("/models", response_model=list[str])
+async def list_models(user: User = Depends(current_user)):
+    driver = get_inference_driver()
+    return await driver.get_models()
 
 @router.post("/completions", response_model=ChatResponse)
 async def chat_completions(
@@ -114,7 +121,7 @@ async def chat_completions(
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_502_BAD_GATEWAY,
-            detail=f"Erreur d'inférence locale : {str(e)}"
+            detail=f"Erreur d'inférence locale : {e!s}"
         )
 
     assistant_content = response.choices[0].message.content
@@ -130,7 +137,7 @@ async def chat_completions(
     db.add(assistant_db_message)
     
     # Update conversation timestamp
-    conversation.updated_at = datetime.now(timezone.utc).replace(tzinfo=None)
+    conversation.updated_at = datetime.now(UTC).replace(tzinfo=None)
     db.add(conversation)
     
     await db.commit()
@@ -231,18 +238,18 @@ async def chat_stream(
                 latency_ms=latency_ms
             )
             db.add(assistant_db_message)
-            conversation.updated_at = datetime.now(timezone.utc).replace(tzinfo=None)
+            conversation.updated_at = datetime.now(UTC).replace(tzinfo=None)
             db.add(conversation)
             await db.commit()
             
             yield "data: [DONE]\n\n"
         except Exception as e:
-            yield f"data: {json.dumps({'error': f'Erreur de streaming: {str(e)}'})}\n\n"
+            yield f"data: {json.dumps({'error': f'Erreur de streaming: {e!s}'})}\n\n"
             yield "data: [DONE]\n\n"
 
     return StreamingResponse(event_generator(), media_type="text/event-stream")
 
-@router.get("/conversations", response_model=List[ConversationResponse])
+@router.get("/conversations", response_model=list[ConversationResponse])
 async def get_conversations(
     user: User = Depends(current_user),
     db: AsyncSession = Depends(get_session)
@@ -255,7 +262,7 @@ async def get_conversations(
 
     result = await db.exec(
         select(Conversation)
-        .where(Conversation.user_id == user.id, Conversation.archived_at == None)
+        .where(Conversation.user_id == user.id, Conversation.archived_at is None)
         .order_by(desc(Conversation.updated_at))
     )
     conversations = result.all()
@@ -271,7 +278,7 @@ async def get_conversations(
         for c in conversations
     ]
 
-@router.get("/conversations/{conversation_id}/messages", response_model=List[MessageResponse])
+@router.get("/conversations/{conversation_id}/messages", response_model=list[MessageResponse])
 async def get_messages(
     conversation_id: str,
     user: User = Depends(current_user),
@@ -313,3 +320,103 @@ async def get_messages(
         )
         for m in messages
     ]
+
+@router.get("/observability")
+async def get_observability_stats(
+    user: User = Depends(current_user),  # noqa: B008
+    db: AsyncSession = Depends(get_session)  # noqa: B008
+):
+    if user.id is None:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Identifiant utilisateur non trouvé."
+        )
+
+    # 1. Active Backend info
+    driver = get_inference_driver()
+    backend_url = driver.base_url
+    
+    # Ping active backend
+    backend_ping = False
+    loaded_models = []
+    try:
+        loaded_models = await driver.get_models()
+        backend_ping = True
+    except Exception:  # noqa: S110
+        pass
+
+    # 2. Installed models
+    installed_result = await db.exec(select(InstalledModel))
+    installed_models = installed_result.all()
+    installed_count = len(installed_models)
+
+    # 3. Personal Stats
+    # Conversations count
+    convo_count_result = await db.exec(
+        select(func.count(Conversation.id)).where(
+            Conversation.user_id == user.id,
+            Conversation.archived_at.is_(None)
+        )
+    )
+    conversations_count = convo_count_result.first() or 0
+
+    # Total tokens in/out
+    tokens_result = await db.exec(
+        select(
+            func.sum(Message.tokens_in),
+            func.sum(Message.tokens_out)
+        ).join(Conversation).where(
+            Conversation.user_id == user.id
+        )
+    )
+    tokens_data = tokens_result.first()
+    
+    total_tokens_in = 0
+    total_tokens_out = 0
+    if tokens_data:
+        total_tokens_in = tokens_data[0] if tokens_data[0] is not None else 0
+        total_tokens_out = tokens_data[1] if tokens_data[1] is not None else 0
+
+    # 4. Recent conversations (last 20)
+    recent_convo_result = await db.exec(
+        select(Conversation)
+        .where(Conversation.user_id == user.id, Conversation.archived_at.is_(None))
+        .order_by(desc(Conversation.updated_at))
+        .limit(20)
+    )
+    recent_convos = recent_convo_result.all()
+    
+    recent_conversations_list = []
+    for c in recent_convos:
+        # Get count of messages in this convo
+        msg_count_result = await db.exec(
+            select(func.count(Message.id)).where(Message.conversation_id == c.id)
+        )
+        msg_count = msg_count_result.first() or 0
+        recent_conversations_list.append({
+            "id": c.id,
+            "title": c.title,
+            "model_id": c.model_id,
+            "created_at": c.created_at.timestamp(),
+            "message_count": msg_count
+        })
+
+    return {
+        "backend_active": settings.LOCALAI_INFERENCE_BACKEND,
+        "backend_url": backend_url,
+        "backend_ping": backend_ping,
+        "models_loaded": loaded_models,
+        "installed_count": installed_count,
+        "installed_models": [
+            {
+                "model_id": m.model_id,
+                "path": m.path,
+                "installed_at": m.installed_at.timestamp() if m.installed_at else None
+            }
+            for m in installed_models
+        ],
+        "conversations_count": conversations_count,
+        "total_tokens_in": total_tokens_in,
+        "total_tokens_out": total_tokens_out,
+        "recent_conversations": recent_conversations_list
+    }

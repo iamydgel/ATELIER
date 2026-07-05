@@ -1,9 +1,11 @@
-from datetime import datetime, timezone
 import uuid
+from datetime import UTC, datetime
+
 from sqlmodel import Field, SQLModel
 
+
 def utc_now() -> datetime:
-    return datetime.now(timezone.utc).replace(tzinfo=None)
+    return datetime.now(UTC).replace(tzinfo=None)
 
 class User(SQLModel, table=True):
     __tablename__ = "user"  # type: ignore
