@@ -283,7 +283,7 @@ async def get_conversations(
 
     result = await db.exec(
         select(Conversation)
-        .where(Conversation.user_id == user.id, Conversation.archived_at is None)
+        .where(Conversation.user_id == user.id, Conversation.archived_at.is_(None))
         .order_by(desc(Conversation.updated_at))
     )
     conversations = result.all()
