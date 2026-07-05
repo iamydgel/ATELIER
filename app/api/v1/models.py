@@ -89,6 +89,54 @@ async def get_models_catalog(
         # If driver is offline, we just continue with empty loaded list
         pass
 
+    # Automatically register loaded models in DB if they aren't there
+    needs_refresh = False
+    for lm_id in loaded_model_ids:
+        if not any(m.id == lm_id for m in models):
+            family = "Local"
+            if "llama" in lm_id.lower():
+                family = "Llama"
+            elif "mistral" in lm_id.lower():
+                family = "Mistral"
+            elif "gemma" in lm_id.lower():
+                family = "Gemma"
+            elif "phi" in lm_id.lower():
+                family = "Phi"
+            elif "qwen" in lm_id.lower():
+                family = "Qwen"
+
+            new_model = Model(
+                id=lm_id,
+                family=family,
+                version="Local",
+                quant="Unknown",
+                modality="text",
+                license="Proprietary/Open",
+                source_url="",
+                size_bytes=0,
+                requires_vram_gb=None
+            )
+            db.add(new_model)
+            
+            existing_inst = await db.get(InstalledModel, lm_id)
+            if not existing_inst:
+                db_inst = InstalledModel(
+                    model_id=lm_id,
+                    path=f"~/.localai/models/{lm_id}/",
+                    installed_at=datetime.now(UTC)
+                )
+                db.add(db_inst)
+            needs_refresh = True
+
+    if needs_refresh:
+        await db.commit()
+        # Refetch all models from DB
+        models_result = await db.exec(select(Model))
+        models = models_result.all()
+        # Refetch installed models
+        installed_result = await db.exec(select(InstalledModel))
+        installed_models = {im.model_id: im for im in installed_result.all()}
+
     # 4. Map statuses
     catalog = []
     for m in models:
