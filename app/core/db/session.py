@@ -19,8 +19,10 @@ async def get_session():
     async with async_session_maker() as session:
         yield session
 
-async def init_db():
-    async with engine.begin() as conn:
+async def init_db(db_engine=None):
+    if db_engine is None:
+        db_engine = engine
+    async with db_engine.begin() as conn:
         from app.core.db.models import (
             Model,
         )
@@ -28,6 +30,12 @@ async def init_db():
         
         await conn.execute(text("PRAGMA journal_mode=WAL;"))
         await conn.execute(text("PRAGMA foreign_keys=ON;"))
+
+        # Vérification et migration à chaud pour la colonne 'truncated' dans la table 'message'
+        cursor = await conn.execute(text("PRAGMA table_info(message);"))
+        columns = [row[1] for row in cursor.fetchall()]
+        if columns and "truncated" not in columns:
+            await conn.execute(text("ALTER TABLE message ADD COLUMN truncated BOOLEAN DEFAULT 0;"))
 
     # Seed default models if not already present
     from sqlmodel import select
