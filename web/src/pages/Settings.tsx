@@ -86,52 +86,55 @@ export default function Settings() {
                   Chargement de la configuration...
                 </div>
               ) : (
-              <div>
-                <label className="block text-xs font-mono text-text-3 uppercase tracking-wider mb-2">
-                  Backend Actif
-                </label>
-                <div className="flex items-center gap-6">
-                  {['lmstudio', 'ollama', 'llamacpp'].map(backend => (
-                    <label key={backend} className="flex items-center gap-2 text-sm text-text-2 cursor-not-allowed">
-                      <input
-                        type="radio"
-                        name="backend-type"
-                        checked={backendType === backend}
-                        readOnly
-                        disabled={backendType !== backend}
-                        className="accent-accent-warm"
-                      />
-                      <span className={`capitalize ${backendType === backend ? 'text-accent-warm font-bold' : 'text-text-3'}`}>
-                        {backend === 'llamacpp' ? 'llama.cpp' : backend}
-                      </span>
+                <>
+                  <div>
+                    <label className="block text-xs font-mono text-text-3 uppercase tracking-wider mb-2">
+                      Backend Actif
                     </label>
-                  ))}
-                </div>
-                <span className="block text-[10px] text-text-3 font-mono mt-2 italic">
-                  💡 Modifiable dans ~/.localai/.env (Redémarrage requis)
-                </span>
-              </div>
+                    <div className="flex items-center gap-6">
+                      {['lmstudio', 'ollama', 'llamacpp'].map(backend => (
+                        <label key={backend} className="flex items-center gap-2 text-sm text-text-2 cursor-not-allowed">
+                          <input
+                            type="radio"
+                            name="backend-type"
+                            checked={backendType === backend}
+                            readOnly
+                            disabled={backendType !== backend}
+                            className="accent-accent-warm"
+                          />
+                          <span className={`capitalize ${backendType === backend ? 'text-accent-warm font-bold' : 'text-text-3'}`}>
+                            {backend === 'llamacpp' ? 'llama.cpp' : backend}
+                          </span>
+                        </label>
+                      ))}
+                    </div>
+                    <span className="block text-[10px] text-text-3 font-mono mt-2 italic">
+                      💡 Modifiable dans ~/.localai/.env (Redémarrage requis)
+                    </span>
+                  </div>
 
-              <div>
-                <label className="block text-xs font-mono text-text-3 uppercase tracking-wider mb-1">
-                  URL de l'API locale
-                </label>
-                <div className="flex items-center gap-2">
-                  <span className="flex-1 bg-bg-2 border border-line-1 rounded py-2 px-3 text-xs font-mono text-text-2 truncate select-all">
-                    {backendUrl}
-                  </span>
-                  <button
-                    onClick={handleCopyUrl}
-                    className="p-2 border border-line-1 hover:border-line-2 bg-bg-2 rounded text-text-3 hover:text-text-1 active:scale-95 transition-all cursor-pointer"
-                    title="Copier l'URL"
-                  >
-                    {copied ? <Check className="w-4 h-4 text-accent-success" /> : <Copy className="w-4 h-4" />}
-                  </button>
-                </div>
-              </div>
-            )}
+                  <div>
+                    <label className="block text-xs font-mono text-text-3 uppercase tracking-wider mb-1">
+                      URL de l'API locale
+                    </label>
+                    <div className="flex items-center gap-2">
+                      <span className="flex-1 bg-bg-2 border border-line-1 rounded py-2 px-3 text-xs font-mono text-text-2 truncate select-all">
+                        {backendUrl}
+                      </span>
+                      <button
+                        onClick={handleCopyUrl}
+                        aria-label="Copier l'URL du backend"
+                        className="p-2 border border-line-1 hover:border-line-2 bg-bg-2 rounded text-text-3 hover:text-text-1 active:scale-95 transition-all cursor-pointer"
+                        title="Copier l'URL"
+                      >
+                        {copied ? <Check className="w-4 h-4 text-accent-success" /> : <Copy className="w-4 h-4" />}
+                      </button>
+                    </div>
+                  </div>
+                </>
+              )}
+            </div>
           </div>
-        </div>
 
           {/* Section: Profil */}
           {user && (
