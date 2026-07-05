@@ -97,7 +97,7 @@ async def login(payload: UserLogin, response: Response, db: AsyncSession = Depen
         key=SESSION_COOKIE_NAME,
         value=signed_cookie,
         httponly=True,
-        samesite="strict",
+        samesite="lax",
         secure=False,  # Set to True if using HTTPS in prod
         max_age=settings.LOCALAI_SESSION_TTL_HOURS * 3600
     )

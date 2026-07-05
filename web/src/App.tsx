@@ -33,8 +33,8 @@ const queryClient = new QueryClient({
   },
 })
 
-// BASE_URL of the FastAPI Server
-const API_BASE = 'http://127.0.0.1:8080/api/v1'
+// BASE_URL of the FastAPI Server (proxied by Vite in dev)
+const API_BASE = '/api/v1'
 
 interface Message {
   id: string
